@@ -1,9 +1,7 @@
-package com.seprid.fileanalyser;
+package com.seprid.fileanalyser.processor;
 
 import com.seprid.fileanalyser.entity.LineObject;
 import com.seprid.fileanalyser.service.LineObjectService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.File;

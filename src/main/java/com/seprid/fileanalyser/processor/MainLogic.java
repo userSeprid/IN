@@ -1,32 +1,18 @@
-package com.seprid.fileanalyser;
+package com.seprid.fileanalyser.processor;
 
 import com.seprid.fileanalyser.service.LineObjectService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
 
 public class MainLogic {
 
     private ConcurrentHandler handler;
     private List<File> filesList;
-    private String informationMessage = "Hello.\nPlease write path to text file or to directory that contains at least one file." +
-            "\nIn case if subdirectories present, they also will checked.";
 
     {
         filesList = new ArrayList<>();
-    }
-
-    @Autowired
-    public MainLogic(LineObjectService service) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println(informationMessage);
-        String mainPath = scanner.nextLine();
-        if (!mainPath.isEmpty() && mainPath != null)init(mainPath, service);
-        System.out.println("shit");
     }
 
     public void init(String mainPath, LineObjectService service) {
@@ -49,5 +35,7 @@ public class MainLogic {
         }
     }
 
-
+    public List<File> getFilesList() {
+        return filesList;
+    }
 }

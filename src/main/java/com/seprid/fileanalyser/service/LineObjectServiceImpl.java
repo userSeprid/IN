@@ -1,41 +1,39 @@
 package com.seprid.fileanalyser.service;
 
+import com.seprid.fileanalyser.DAO.LineObjectDAO;
 import com.seprid.fileanalyser.entity.LineObject;
-import com.seprid.fileanalyser.repository.LineObjectRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-@Component
+
 public class LineObjectServiceImpl implements LineObjectService {
 
-    @Autowired
-    LineObjectRepository repository;
 
-    @Override
-    public void create(LineObject object) {
-        repository.saveAndFlush(object);
+    LineObjectDAO dao;
+
+    public LineObjectServiceImpl(LineObjectDAO dao) {
+        this.dao = dao;
     }
 
     @Override
-    @Transactional(readOnly = true)
+    public void create(LineObject object) {
+        dao.createLineObject(object);
+    }
+
+    @Override
     public LineObject getLineObject(int ID) {
-        return repository.getOne(ID);
+        return dao.getLineObject(ID);
     }
 
     @Override
     public void update(LineObject object) {
-        if (repository.exists(object.getLineID())) {
-            repository.delete(object.getLineID());
-            repository.saveAndFlush(object);
+        if (getLineObject(object.getLineID()) != null) {
+            dao.updateLineObject(object);
         }else System.out.println("Line with ID:\'" + object.getLineID() + "\' doesn't exist.");
     }
 
     @Override
     public void delete(int ID) {
-        if (repository.exists(ID)) {
-            repository.delete(ID);
-            repository.flush();
+        if (getLineObject(ID) != null) {
+            dao.deleteLineObject(ID);
         }else System.out.println("Line with ID:\'" + ID + "\' doesn't exist.");
     }
 }

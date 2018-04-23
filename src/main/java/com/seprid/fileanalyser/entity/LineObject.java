@@ -1,28 +1,17 @@
 package com.seprid.fileanalyser.entity;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
-
-import javax.persistence.*;
 import java.util.StringTokenizer;
 
-//@Data
-@Entity
-@Table(name = "lineData")
+
 public class LineObject {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private int lineID;
-    @Column(name = "value")
     private String value;
-    @Column(name = "longestWord")
     private String longestWord;
-    @Column(name = "shortestWord")
     private String shortestWord;
-    @Column(name = "averageWordLength")
     private int averageWordLength;
     // Name of file that contains line
-    @Column(name = "containerName")
     private String containerName;
 
     public LineObject(String value, String containerName) {
@@ -44,7 +33,7 @@ public class LineObject {
         averageWordLength = averageWordLength / tokenizer.countTokens();
     }
 
-    protected LineObject() {
+    public LineObject() {
     }
 
     public int getLineID() {
