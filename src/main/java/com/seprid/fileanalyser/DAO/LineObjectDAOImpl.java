@@ -33,9 +33,11 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     @Override
     public int createLineObject(LineObject object) {
         try (Statement statement = connection.createStatement()) {
-        String createQuery = "INSERT INTO \"PUBLIC\".\"LINEOBJECT\" (\"VALUE\", \"LONGESTWORD\", \"SHORTESTWORD\", \"AVERAGEWORDLENGTH\", \"CONTAINERNAME\") " +
-                "VALUES (\'" + object.getValue() + "\', \'" + object.getLongestWord() + "\', \'" + object.getShortestWord() +
-                "\', "+ object.getAverageWordLength() + ", \'" + object.getContainerName() + "\')";
+        String createQuery = "INSERT INTO \"PUBLIC\".\"TABLE_NAME\" " +
+                "(\"VALUE\", \"LONGESTWORD\", \"SHORTESTWORD\", \"AVERAGEWORDLENGTH\", \"CONTAINERNAME\", \"LINELENGTH\") " +
+                "VALUES " +
+                "('" + object.getValue() + "', '" + object.getLongestWord() + "', '" + object.getShortestWord() +
+                "', " + object.getAverageWordLength() + ", '" + object.getContainerName() + "', " + object.getLineLength() + ")";
             statement.execute(createQuery);
 
             ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -93,8 +95,9 @@ public class LineObjectDAOImpl implements LineObjectDAO {
                 "t.\"SHORTESTWORD\" = \'" + updatedObject.getShortestWord() + "\', " +
                 "t.\"AVERAGEWORDLENGTH\" = " + updatedObject.getAverageWordLength() + ", " +
                 "t.\"CONTAINERNAME\" = \'" + updatedObject.getContainerName() + "\' " +
+                "t.\"LINELENGTH\" = " + updatedObject.getLineLength() + " " +
                 "WHERE " +
-                "t.\"LINEID\" = 2";
+                "t.\"LINEID\" = " + updatedObject.getLineID();
             statement.executeUpdate(updateQuery);
         } catch (SQLException e) {
             System.out.println("Error during updating entry. Entry value:\'" + updatedObject.getValue() +

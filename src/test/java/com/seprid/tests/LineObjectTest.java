@@ -14,6 +14,7 @@ public class LineObjectTest {
     private static final String shorestWord = "a";
     private static final int averageWordLength = 8;
     private static final String containerName = "lead-container";
+    private static final int lineLength = 262;
     private LineObject object;
 
     private void init() {
@@ -32,6 +33,7 @@ public class LineObjectTest {
         Assert.assertEquals("Proper generation of \'Longest word\'", longestWord, object.getLongestWord().toLowerCase());
         Assert.assertEquals("Proper generation of \'Shortest word\'", shorestWord, object.getShortestWord().toLowerCase());
         Assert.assertEquals("Proper generation of \'Average Word-Length\'", averageWordLength, object.getAverageWordLength());
+        Assert.assertEquals("Proper generation of \'Line Length\'", lineLength, object.getLineLength());
     }
 
     @Test

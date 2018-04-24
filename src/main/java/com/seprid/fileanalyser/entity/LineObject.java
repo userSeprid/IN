@@ -16,6 +16,7 @@ public class LineObject {
     private int averageWordLength;
     // Name of file that contains line
     private String containerName;
+    private int lineLength;
 
     /**
      * The default constructor that take only 2 parameters, other is generating by this object.
@@ -24,6 +25,7 @@ public class LineObject {
      */
     public LineObject(String value, String containerName) {
         this.value = value;
+        lineLength = value.length();
         this.containerName = containerName;
         longestWord = "";
         shortestWord = value;
@@ -90,5 +92,13 @@ public class LineObject {
 
     public void setContainerName(String containerName) {
         this.containerName = containerName;
+    }
+
+    public int getLineLength() {
+        return lineLength;
+    }
+
+    public void setLineLength(int lineLength) {
+        this.lineLength = lineLength;
     }
 }
