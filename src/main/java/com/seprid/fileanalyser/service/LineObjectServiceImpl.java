@@ -14,8 +14,8 @@ public class LineObjectServiceImpl implements LineObjectService {
     }
 
     @Override
-    public void create(LineObject object) {
-        dao.createLineObject(object);
+    public int create(LineObject object) {
+        return dao.createLineObject(object);
     }
 
     @Override

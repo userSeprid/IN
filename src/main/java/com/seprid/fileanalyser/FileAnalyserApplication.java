@@ -14,9 +14,12 @@ import java.util.Properties;
 
 public class FileAnalyserApplication{
 
+    /**
+     * 'Main' method that start an app.
+     * Contain important configuration.
+     * @param args console input
+     */
 	public static void main(String[] args) {
-	    String s = "a.txt";
-
 
 			Properties props = new Properties();
             try (FileInputStream in = new FileInputStream("application.properties")){
@@ -28,7 +31,7 @@ public class FileAnalyserApplication{
                         props.getProperty("db.password")
                 )));
                 MainLogic logic = new MainLogic();
-                logic.init(s, service);
+                logic.init(args[0], service);
             } catch (FileNotFoundException e) {
                 System.out.println("Program can't connect to DB");
             } catch (IOException e) {

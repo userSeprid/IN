@@ -3,6 +3,9 @@ package com.seprid.fileanalyser.entity;
 import java.util.StringTokenizer;
 
 
+/**
+ * Entity that represent an entry in DB.
+ */
 public class LineObject {
 
 
@@ -14,6 +17,11 @@ public class LineObject {
     // Name of file that contains line
     private String containerName;
 
+    /**
+     * The default constructor that take only 2 parameters, other is generating by this object.
+     * @param value Content of line that will be processed.
+     * @param containerName Name of file that contain this line.
+     */
     public LineObject(String value, String containerName) {
         this.value = value;
         this.containerName = containerName;

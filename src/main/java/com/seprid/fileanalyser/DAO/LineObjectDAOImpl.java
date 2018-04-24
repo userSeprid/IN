@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Default implementation of <code>LineObjectDAO</code>
+ * Default implementation of <code>LineObjectDAO</code>.
  * @see LineObjectDAO
  */
 public class LineObjectDAOImpl implements LineObjectDAO {
@@ -16,8 +16,8 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     private Connection connection;
 
     /**
-     * Connection receives by constructor because it make tests a bit easy to write and decouple configuration from logic
-     * @param conn an java.sql.Connection that used here for accessing to DB
+     * Connection receives by constructor because it make tests a bit easy to write and decouple configuration from logic.
+     * @param conn an java.sql.Connection that used here for accessing to DB.
      * @see Connection
      */
     public LineObjectDAOImpl(Connection conn) {
@@ -25,27 +25,39 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     }
 
     /**
-     * Perform 'Create' operation
-     * @param object instance <code>com.seprid.fileanalyser.entity.LineObject</code> that will be persist in DB
+     * Perform 'Create' operation.
+     * @param object instance <code>com.seprid.fileanalyser.entity.LineObject</code> that will be persist in DB.
+     * @return return ID of persisted object
      * @see LineObject
      */
     @Override
-    public void createLineObject(LineObject object) {
+    public int createLineObject(LineObject object) {
         try (Statement statement = connection.createStatement()) {
         String createQuery = "INSERT INTO \"PUBLIC\".\"LINEOBJECT\" (\"VALUE\", \"LONGESTWORD\", \"SHORTESTWORD\", \"AVERAGEWORDLENGTH\", \"CONTAINERNAME\") " +
                 "VALUES (\'" + object.getValue() + "\', \'" + object.getLongestWord() + "\', \'" + object.getShortestWord() +
                 "\', "+ object.getAverageWordLength() + ", \'" + object.getContainerName() + "\')";
             statement.execute(createQuery);
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                }
+                else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+
+
         } catch (SQLException e) {
             System.out.println("Error during creating new entry. Entry value:\'" + object.getValue() +
             "\'. Entry container name:\'" + object.getContainerName() + "\'.");
         }
+        return Integer.parseInt(null);
     }
 
     /**
-     * Perform 'Read' operation
-     * @param ID integer value that is a primary key for LineObject entity
-     * @return instance of <code>com.seprid.fileanalyser.entity.LineObject</code> from DB
+     * Perform 'Read' operation.
+     * @param ID integer value that is a primary key for LineObject entity.
+     * @return instance of <code>com.seprid.fileanalyser.entity.LineObject</code> from DB.
      */
     @Override
     public LineObject getLineObject(Integer ID) {
@@ -68,8 +80,8 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     }
 
     /**
-     * Perform 'Update' operation
-     * @param updatedObject instance of <code>com.seprid.fileanalyser.entity.LineObject</code> that will replace it copy in DB
+     * Perform 'Update' operation.
+     * @param updatedObject instance of <code>com.seprid.fileanalyser.entity.LineObject</code> that will replace it copy in DB.
      */
     @Override
     public void updateLineObject(LineObject updatedObject) {
@@ -91,8 +103,8 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     }
 
     /**
-     * Perform 'Delete' operation
-     * @param ID integer value that is a primary key for <code>com.seprid.fileanalyser.entity.LineObject</code> entity
+     * Perform 'Delete' operation.
+     * @param ID integer value that is a primary key for <code>com.seprid.fileanalyser.entity.LineObject</code> entity.
      */
     @Override
     public void deleteLineObject(int ID) {
