@@ -74,8 +74,8 @@ public class ConcurrentHandler extends RecursiveAction {
             List<String> lines = reader.lines().collect(Collectors.toList());
             for (String line :
                     lines) {
-                int id = service.create(new LineObject(line, file.getName()));
-                System.out.println("New line created. ID:\'" + id + "\'");
+                service.create(new LineObject(line, file.getName()));
+                System.out.println("New line created.");
             }
         } catch (FileNotFoundException e) {
             System.out.println("Can't found file " + file.getName() + " file path: " + file.getAbsolutePath());

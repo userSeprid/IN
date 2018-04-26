@@ -2,10 +2,7 @@ package com.seprid.fileanalyser.DAO;
 
 import com.seprid.fileanalyser.entity.LineObject;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * Default implementation of <code>LineObjectDAO</code>.
@@ -14,6 +11,10 @@ import java.sql.Statement;
 public class LineObjectDAOImpl implements LineObjectDAO {
 
     private Connection connection;
+
+    String createQuery = "INSERT INTO `dev`.`line_object` " +
+            "(value, longest_word, shortest_word, average_word_length, container_name, line_length) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
 
     /**
      * Connection receives by constructor because it make tests a bit easy to write and decouple configuration from logic.
@@ -31,29 +32,21 @@ public class LineObjectDAOImpl implements LineObjectDAO {
      * @see LineObject
      */
     @Override
-    public int createLineObject(LineObject object) {
-        try (Statement statement = connection.createStatement()) {
-        String createQuery = "INSERT INTO \"PUBLIC\".\"TABLE_NAME\" " +
-                "(\"VALUE\", \"LONGESTWORD\", \"SHORTESTWORD\", \"AVERAGEWORDLENGTH\", \"CONTAINERNAME\", \"LINELENGTH\") " +
-                "VALUES " +
-                "('" + object.getValue() + "', '" + object.getLongestWord() + "', '" + object.getShortestWord() +
-                "', " + object.getAverageWordLength() + ", '" + object.getContainerName() + "', " + object.getLineLength() + ")";
-            statement.execute(createQuery);
+    public void createLineObject(LineObject object) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(createQuery);) {
 
-            ResultSet generatedKeys = statement.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                    return generatedKeys.getInt(1);
-                }
-                else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
-                }
-
-
+            preparedStatement.setString(1, object.getValue());
+            preparedStatement.setString(2, object.getLongestWord());
+            preparedStatement.setString(3, object.getShortestWord());
+            preparedStatement.setInt(4, object.getAverageWordLength());
+            preparedStatement.setString(5, object.getContainerName());
+            preparedStatement.setInt(6, object.getLineLength());
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error during creating new entry. Entry value:\'" + object.getValue() +
             "\'. Entry container name:\'" + object.getContainerName() + "\'.");
+            e.printStackTrace();
         }
-        return Integer.parseInt(null);
     }
 
     /**
@@ -64,7 +57,7 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     @Override
     public LineObject getLineObject(Integer ID) {
         try (Statement statement = connection.createStatement()){
-        String getQuery = "SELECT t.* FROM PUBLIC.LINEOBJECT t where t.LINEID = " + ID;
+        String getQuery = "SELECT t.* FROM dev.line_object t where t.LINEID = " + ID;
             ResultSet rs = statement.executeQuery(getQuery);
             while (rs.next()) {
                 LineObject object = new LineObject();
@@ -88,7 +81,7 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     @Override
     public void updateLineObject(LineObject updatedObject) {
         try (Statement statement = connection.createStatement()) {
-        String updateQuery = "UPDATE \"PUBLIC\".\"LINEOBJECT\" t " +
+        String updateQuery = "UPDATE \"dev\".\"line_object\" t " +
                 "SET " +
                 "t.\"VALUE\" = \'" + updatedObject.getValue() + "\', " +
                 "t.\"LONGESTWORD\" = \'" + updatedObject.getLongestWord() + "\', " +
@@ -112,7 +105,7 @@ public class LineObjectDAOImpl implements LineObjectDAO {
     @Override
     public void deleteLineObject(int ID) {
         try (Statement statement = connection.createStatement()) {
-            String deleteQuery = "DELETE FROM \"PUBLIC\".\"LINEOBJECT\" WHERE \"LINEID\" = " + ID;
+            String deleteQuery = "DELETE FROM \"dev\".\"line_object\" WHERE \"LINEID\" = " + ID;
             ResultSet rs = statement.executeQuery(deleteQuery);
         } catch (SQLException e) {
             System.out.println("Error during deleting entry. Entry ID:\'" + ID + "\'.");
