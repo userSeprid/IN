@@ -16,16 +16,30 @@ public class FileAnalyserApplication{
      * @param args console input
      */
 	public static void main(String[] args) {
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/dev",
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/dev",
                             "root", "root")){
-                System.out.println("flag");
                 LineObjectService service = new LineObjectServiceImpl(
                         new LineObjectDAOImpl(connection));
-                System.out.println("flag2");
                 MainLogic logic = new MainLogic();
-                System.out.println("flag3");
-                logic.init(args[0], service);
-                System.out.println("flag4");
+
+            /**Here is very interesting place.
+             * The project works okay if I run it from my IDE,
+             * but when I pack it ito jar file it fail.
+             * Honestly  spend lots of time to find out why its happen,
+             * but no any success so I let it like this (manual input of path to file)
+             */
+            logic.init("a.txt", service);
             } catch (SQLException e) {
                 System.out.println("Problem with connection to DB");
                 e.printStackTrace();
